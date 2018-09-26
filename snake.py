@@ -2,7 +2,7 @@ import os
 import glob
 import math 
 
-localrules: final, all, split
+localrules: final, all, split, collect_reads
 configfile: "config.yaml"
 
 prefix = os.path.abspath(config["output_dir"]) + "/"
@@ -47,7 +47,7 @@ rule basecall:
 	input:
 		fofn = prefix + "fofns/{ID}.fofn"
 	output:
-		reads = prefix + "reads/{ID}.done"
+		reads = prefix + "basecalling/{ID}.done"
 	params:
 		cluster=" -l mfree=2G -pe serial 4 "
 	threads: 4
@@ -58,7 +58,7 @@ module load modules modules-init modules-gs/prod modules-eichler
 module load python/3.6.4
 module load albacore/2.3.3
 
-outdir={prefix}reads/{wildcards.ID}/
+outdir={prefix}basecalling/{wildcards.ID}/
 mkdir -p $outdir
 
 cat {input.fofn} | \
@@ -68,15 +68,27 @@ cat {input.fofn} | \
 touch {output}
 """
 
-
-
+rule collect_reads:
+	input:
+		reads = expand(prefix + "basecalling/{ID}.done", ID=IDS),
+	output:
+		combined = prefix + "reads.fastq",
+	shell:"""
+rm {output.combined}
+for file in $(ls {prefix}/basecalling/*/workspace/pass/*.fastq); do
+	>&2 echo $file
+	cat $file >> {output.combined} 
+done
+"""
 
 rule final:
 	input:
-		reads = expand(prefix + "reads/{ID}.done", ID=IDS),
+		combined = prefix + "reads.fastq",
 	output:
 		prefix + "final"
-	shell:
-		"touch {output}"
+	shell:"""
+touch {output}
+#rm -rf {prefix}/basecalling
+"""
 
 

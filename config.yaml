@@ -1,2 +1,2 @@
-reads_fofn: test/test.fofn
-output_dir: test/
+reads_fofn: /net/eichler/vol24/projects/sequencing/minion/nobackups/CHM13/20180925_1625_CHM13_2ug1to75/reads.fofn
+output_dir: /net/eichler/vol24/projects/sequencing/minion/nobackups/CHM13/20180925_1625_CHM13_2ug1to75/

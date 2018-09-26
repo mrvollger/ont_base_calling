@@ -8,7 +8,8 @@ set -x
 #
 # snakemake paramenters
 #
-snakefile=$(readlink -f snake.py)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+snakefile=$DIR/snake.py
 jobNum=20
 waitTime=60 # this really needs to be 60 on our cluster :(
 
