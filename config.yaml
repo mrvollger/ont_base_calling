@@ -1,0 +1,2 @@
+reads_fofn: test/test.fofn
+output_dir: test/
