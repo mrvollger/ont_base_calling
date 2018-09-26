@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-module purge
-. /etc/profile.d/modules.sh
-module load modules modules-init modules-gs/prod modules-eichler
-export PATH=/net/eichler/vol2/home/mvollger/projects/builds/anaconda/anaconda3/bin:$PATH
-set -x
 
 #
 # snakemake paramenters
@@ -12,6 +7,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 snakefile=$DIR/snake.py
 jobNum=20
 waitTime=60 # this really needs to be 60 on our cluster :(
+
+#echo $DIR
+#exit
 
 #
 # QSUB parameters, these are only the defualts, they can be changed with params.sge_opts

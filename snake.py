@@ -74,7 +74,7 @@ rule collect_reads:
 	output:
 		combined = prefix + "reads.fastq",
 	shell:"""
-rm {output.combined}
+rm -f {output.combined}
 for file in $(ls {prefix}/basecalling/*/workspace/pass/*.fastq); do
 	>&2 echo $file
 	cat $file >> {output.combined} 
@@ -85,10 +85,12 @@ rule final:
 	input:
 		combined = prefix + "reads.fastq",
 	output:
-		prefix + "final"
+		final = prefix + "final",
+		readme = prefix + "README.md",
 	shell:"""
-touch {output}
-#rm -rf {prefix}/basecalling
+echo "basecalling, logs, and fofns direcotries can be safely removed." > {output.readme} 
+touch {output.final}
+#rm -rf {prefix}/basecalling {prefix}/fofns {prefix}/logs
 """
 
 
